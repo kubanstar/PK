@@ -17300,30 +17300,31 @@
 
 		ctx.font = `${fonts.product}px "Arial"`;
 
-		const productName = product.name;
+		let productName = product.name;
+
+		if (productName.length > 55) {
+			productName = productName.substring(0, 55) + '...';
+		}
+
 		const words = productName.split(' ');
+		let line1 = '';
+		let line2 = '';
 
-		const maxCharsPerLine = 35;
-
-		let lines = [];
-		let currentLine = '';
-
-		if (productName.length <= maxCharsPerLine) {
-			lines.push(productName);
-		} else {
-			let possibleTwoLines = splitIntoTwoLines(productName, maxCharsPerLine);
-    
-			if (possibleTwoLines && possibleTwoLines.length === 2) {
-				lines = possibleTwoLines;
+		for (const word of words) {
+			if ((line1 + ' ' + word).length <= 25 && !line2) {
+				if (line1) line1 += ' ';
+				line1 += word;
 			} else {
-				lines = splitIntoThreeLines(productName, maxCharsPerLine);
+				if (line2) line2 += ' ';
+				line2 += word;
 			}
 		}
 
-		lines.forEach(line => {
-			ctx.fillText(line.trim(), canvas.width / 2, yPos);
-			yPos += lineHeight;
-		});
+		ctx.fillText(line1, canvas.width / 2, 58);
+
+		if (line2) {
+			ctx.fillText(line2, canvas.width / 2, 83);
+		}
 
 		ctx.beginPath();
 		ctx.moveTo(-8, 95);
@@ -17398,37 +17399,6 @@
             }
             
             return null;
-        }
-
-        function splitIntoThreeLines(text, maxChars) {
-            const words = text.split(' ');
-            let lines = [];
-            let currentLine = '';
-            
-            for (const word of words) {
-                if ((currentLine + ' ' + word).length <= maxChars / 2) {
-                    if (currentLine) currentLine += ' ';
-                    currentLine += word;
-                } else {
-                    if (currentLine) {
-                        lines.push(currentLine);
-                    }
-                    currentLine = word;
-                    
-                    if (lines.length === 2) {
-                        currentLine = '';
-                        const remainingWords = words.slice(words.indexOf(word));
-                        lines.push(remainingWords.join(' '));
-                        break;
-                    }
-                }
-            }
-            
-            if (currentLine && lines.length < 3) {
-                lines.push(currentLine);
-            }
-            
-            return lines;
         }
 
         function canvasToEscPosBitmap(canvas) {
