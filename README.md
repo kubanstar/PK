@@ -18029,7 +18029,7 @@ function initIOSBarcodeScanner() {
                     iosIsScanning = false;
                 });
             }
-            
+				setTimeout(() => {           
                 closeIOSScanner();
                 
                 document.getElementById('modeBarcode').checked = true;
@@ -18045,6 +18045,7 @@ function initIOSBarcodeScanner() {
                 setTimeout(() => {
                     iosLastScannedCode = '';
                 }, 3000);
+		}, 5);				
         }
 
         function onIOSScanError(error) {
