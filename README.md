@@ -18591,8 +18591,8 @@
             modal.id = 'imageModal';
             modal.style.display = 'flex';
             
-            let imageCode = product.imageCode || '';
-            let alternativeImageCode = product.alternativeImageCode || '';
+			let imageCode = product.alternativeImageCode || '';
+			let alternativeImageCode = product.imageCode || '';
             
             let imageUrl = '';
             
