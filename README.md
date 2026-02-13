@@ -961,7 +961,6 @@
             margin-bottom: 5px;
         }
 
-        /* Стили для iOS сканера */
         .ios-scanner-modal {
             display: none;
             position: fixed;
@@ -993,7 +992,6 @@
             position: relative;
         }
         
-        /* Кастомные стили для Html5-QRCode */
         #ios-html5-qrcode-anchor-scan-type-change,
         #ios-html5qr-code-full-region__scan_region {
             display: none !important;
@@ -1276,7 +1274,6 @@
         </div>
     </div>
 
-    <!-- Кнопка "Наверх" -->
     <button class="scroll-to-top-btn" id="scrollToTopBtn" title="Наверх">&#9650;</button>
 
     <!-- Модальное окно камеры для Android -->
@@ -1316,7 +1313,7 @@
                 <div class="ios-loader" id="iosScannerLoader">Загрузка...</div>
                 
                 <div class="ios-no-camera" id="iosNoCameraMessage">
-                    <h3 style="color: #ff3b30; margin-bottom:15px;">⚠️ Камера недоступна</h3>
+                    <h3 style="color: #ff3b30; margin-bottom:15px;">Камера недоступна</h3>
                     <p>Ваш браузер не поддерживает доступ к камере или камера заблокирована.</p>
                     <p style="margin-top:15px; font-size:14px; color:#ccc;">
                         Используйте Safari на iOS
@@ -1326,7 +1323,7 @@
             
             <div class="ios-modal-controls">
                 <button class="ios-modal-btn ios-modal-btn-danger" id="closeIOSScanner">
-                    ✕ Закрыть сканер
+                    Закрыть сканер
                 </button>
                 <button class="ios-modal-btn ios-modal-btn-primary" id="switchIOSCamera" style="display: none;">
                     Переключить камеру
@@ -17263,7 +17260,7 @@
         function createPriceTagImage(product) {
         const canvas = document.createElement('canvas');
 		canvas.width = 440;
-		canvas.height = 240;
+		canvas.height = 248;
 
 		const ctx = canvas.getContext('2d');
 
@@ -17278,8 +17275,8 @@
 		const fonts = {
 			article: 17 * textScale,
 			product: 19 * textScale,
-			price: 22 * textScale,
-			price2: 21 * textScale,
+			price: 30 * textScale,
+			price2: 26 * textScale,
 			date: 16 * textScale,
 			company: 18 * textScale
 		};
@@ -17336,11 +17333,11 @@
 		ctx.font = `bold ${fonts.price}px "Arial"`;
 
 		const retailPriceFormatted = formatNumber(product.retailPrice, true);
-		ctx.fillText(`РОЗ: ${retailPriceFormatted} Руб.`, canvas.width / 2, 127);
+		ctx.fillText(`РОЗ: ${retailPriceFormatted} Руб.`, canvas.width / 2, 135);
 
 		ctx.beginPath();
-		ctx.moveTo(-8, 139);
-		ctx.lineTo(canvas.width - 0, 139);
+		ctx.moveTo(-8, 146);
+		ctx.lineTo(canvas.width - 0, 146);
 		ctx.lineWidth = thickLineHeight;
 		ctx.stroke();
 		yPos += 10 * textScale + 5 * textScale;
@@ -17350,27 +17347,27 @@
 		const wholesalePriceNum = parseFloatValue(product.wholesalePrice);
 		const wholesalePriceFormatted = Math.round(wholesalePriceNum).toString();
 		const wholesaleCode = wholesalePriceFormatted.padStart(6, '0');
-		ctx.fillText(`АРТ000${wholesaleCode}`, canvas.width / 2, 167);
+		ctx.fillText(`АРТ000${wholesaleCode}`, canvas.width / 2, 180);
 
 		ctx.beginPath();
-		ctx.moveTo(-8, 173);
-		ctx.lineTo(canvas.width - 0, 173);
+		ctx.moveTo(-8, 186);
+		ctx.lineTo(canvas.width - 0, 186);
 		ctx.lineWidth = thickLineHeight;
 		ctx.stroke();
 
 		const today = new Date();
 		const dateStr = `${today.getDate().toString().padStart(2, '0')}.${(today.getMonth()+1).toString().padStart(2, '0')}.${today.getFullYear()}`;
 		ctx.font = `bold ${fonts.date}px "Arial"`;
-		ctx.fillText(dateStr, canvas.width / 2, 197);
+		ctx.fillText(dateStr, canvas.width / 2, 207);
 
 		ctx.beginPath();
-		ctx.moveTo(-8, 205);
-		ctx.lineTo(canvas.width - 0, 205);
+		ctx.moveTo(-8, 213);
+		ctx.lineTo(canvas.width - 0, 213);
 		ctx.lineWidth = thickLineHeight;
 		ctx.stroke();
 
 		ctx.font = `${fonts.company}px "Arial"`;
-		ctx.fillText('ИП Мааруф Р.', canvas.width / 2, 230);
+		ctx.fillText('ИП Мааруф Р.', canvas.width / 2, 238);
             
             return canvas;
         }
@@ -17866,19 +17863,18 @@
             }, 300);
         }
 
-// ===== ИСПРАВЛЕННАЯ ФУНКЦИЯ ДЛЯ iOS (iPhone 11/12/13/14/15) =====
-function initIOSBarcodeScanner() {
-    try {
-        if (iosHtml5QrCode && iosIsScanning) {
-            iosHtml5QrCode.stop().then(() => {
-                iosHtml5QrCode.clear();
-                iosHtml5QrCode = null;
-            }).catch(() => {
-                iosHtml5QrCode = null;
-            });
-        }
+		// ===== ФУНКЦИЯ ДЛЯ iOS (iPhone 11/12/13/14/15) =====
+		function initIOSBarcodeScanner() {
+			try {
+				if (iosHtml5QrCode && iosIsScanning) {
+					iosHtml5QrCode.stop().then(() => {
+						iosHtml5QrCode.clear();
+						iosHtml5QrCode = null;
+					}).catch(() => {
+						iosHtml5QrCode = null;
+					});
+				}
 
-        // КОНФИГУРАЦИЯ: Убираем facingMode из первого параметра!
         const config = {
             fps: 10,
             qrbox: { width: 250, height: 150 },
@@ -17913,9 +17909,6 @@ function initIOSBarcodeScanner() {
             document.getElementById('iosNoCameraMessage').style.display = 'none';
             hideIOSScannerStatus();
 
-            // ----------------------------------------------------
-            // МАГИЯ: Принудительно применяем фокус и зум через 1.5 секунды
-            // ----------------------------------------------------
             setTimeout(() => {
                 if (iosHtml5QrCode && iosIsScanning) {
                     try {
@@ -17923,8 +17916,8 @@ function initIOSBarcodeScanner() {
                         iosHtml5QrCode.applyVideoConstraints({
                             focusMode: "continuous"
                         }).then(() => {
-                            console.log('✅ Режим фокусировки установлен: continuous');
-                        }).catch(e => console.warn('⚠️ Не удалось установить focusMode:', e));
+                            console.log('Режим фокусировки установлен: continuous');
+                        }).catch(e => console.warn('Не удалось установить focusMode:', e));
 
                         // 2. Для iPhone 11 и новее: увеличиваем масштаб (зум)
                         //    Это компенсирует большую минимальную дистанцию фокуса!
@@ -17935,8 +17928,8 @@ function initIOSBarcodeScanner() {
                                 iosHtml5QrCode.applyVideoConstraints({
                                     advanced: [{ zoom: 2.2 }] // Экспериментально: 2.2 отлично работает на 12 Pro Max
                                 }).then(() => {
-                                    console.log('✅ Установлен zoom 2.2 для новой камеры');
-                                }).catch(e => console.warn('⚠️ Зум не поддерживается:', e));
+                                    console.log('Установлен zoom 2.2 для новой камеры');
+                                }).catch(e => console.warn('Зум не поддерживается:', e));
                             }, 500); // Немного с задержкой после установки фокуса
                         }
 
@@ -17951,7 +17944,7 @@ function initIOSBarcodeScanner() {
 
             // --- ЗАПАСНОЙ ПЛАН: Пробуем без videoConstraints если не завелось ---
             if (err.toString().includes('Overconstrained') || err.toString().includes('environment')) {
-                console.log('⚠️ Запасной план: без сложных constraints');
+                console.log('Запасной план: без сложных constraints');
                 showIOSScannerStatus('Настройка камеры...');
 
                 iosHtml5QrCode.start(
