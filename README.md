@@ -992,6 +992,7 @@
             position: relative;
         }
         
+        /* Кастомные стили для Html5-QRCode */
         #ios-html5-qrcode-anchor-scan-type-change,
         #ios-html5qr-code-full-region__scan_region {
             display: none !important;
@@ -1276,7 +1277,6 @@
 
     <button class="scroll-to-top-btn" id="scrollToTopBtn" title="Наверх">&#9650;</button>
 
-    <!-- Модальное окно камеры для Android -->
     <div class="modal-overlay" id="cameraModal">
         <div class="modal-frame">
             <h3>Сканирование штрихкода</h3>
@@ -1293,7 +1293,6 @@
         </div>
     </div>
 
-    <!-- Модальное окно сканера для iOS -->
     <div class="ios-scanner-modal" id="iosScannerModal">
         <div class="ios-scanner-content">
             <div class="ios-scanner-container">
@@ -1332,7 +1331,6 @@
         </div>
     </div>
 
-    <!-- Модальное окно результатов сканирования -->
     <div class="modal-overlay" id="resultModal">
         <div class="modal-frame scan-result-frame">
             <div class="scan-result-products" id="resultProducts">
@@ -1352,7 +1350,6 @@
         </div>
     </div>
 
-    <!-- Новое модальное окно печати -->
     <div class="print-modal-new" id="printModal">
         <div class="print-modal-content-new">
             <h3>Печать ценника</h3>
@@ -1375,7 +1372,6 @@
         </div>
     </div>
 
-    <!-- Модальное окно с датами изменения файлов -->
     <div class="modal-overlay" id="datesModal">
         <div class="modal-frame dates-modal">
             <div class="dates-header">
@@ -17259,7 +17255,7 @@
 
         function createPriceTagImage(product) {
         const canvas = document.createElement('canvas');
-		canvas.width = 440;
+		canvas.width = 576;
 		canvas.height = 248;
 
 		const ctx = canvas.getContext('2d');
@@ -17299,8 +17295,8 @@
 
 		let productName = product.name;
 
-		if (productName.length > 55) {
-			productName = productName.substring(0, 55) + '...';
+		if (productName.length > 70) {
+			productName = productName.substring(0, 70) + '...';
 		}
 
 		const words = productName.split(' ');
@@ -17308,7 +17304,7 @@
 		let line2 = '';
 
 		for (const word of words) {
-			if ((line1 + ' ' + word).length <= 25 && !line2) {
+			if ((line1 + ' ' + word).length <= 38 && !line2) {
 				if (line1) line1 += ' ';
 				line1 += word;
 			} else {
@@ -17846,7 +17842,7 @@
             showScanResults(cleanCode, results);
         }
 
-        // ===== НОВЫЕ ФУНКЦИИ ДЛЯ iOS СКАНЕРА =====
+        // ===== ФУНКЦИИ ДЛЯ iOS СКАНЕРА =====
 
         async function openIOSScanner() {
             console.log('Открытие iOS сканера...');
@@ -17875,6 +17871,7 @@
 					});
 				}
 
+        // КОНФИГУРАЦИЯ: Убираем facingMode из первого параметра!
         const config = {
             fps: 10,
             qrbox: { width: 250, height: 150 },
@@ -17909,6 +17906,9 @@
             document.getElementById('iosNoCameraMessage').style.display = 'none';
             hideIOSScannerStatus();
 
+            // ----------------------------------------------------
+            // Принудительно применяем фокус и зум через 1.5 секунды
+            // ----------------------------------------------------
             setTimeout(() => {
                 if (iosHtml5QrCode && iosIsScanning) {
                     try {
@@ -18591,8 +18591,8 @@
             modal.id = 'imageModal';
             modal.style.display = 'flex';
             
-			let imageCode = product.alternativeImageCode || '';
-			let alternativeImageCode = product.imageCode || '';
+            let imageCode = product.imageCode || '';
+            let alternativeImageCode = product.alternativeImageCode || '';
             
             let imageUrl = '';
             
@@ -18909,14 +18909,12 @@
             }
         });
 
-        // Обработчик видимости страницы для iOS
         document.addEventListener('visibilitychange', function() {
             if (document.hidden && iosIsScanning) {
                 closeIOSScanner();
             }
         });
 
-        // Обработчик ориентации для iOS
         window.addEventListener('orientationchange', function() {
             if (iosIsScanning) {
                 setTimeout(() => {
